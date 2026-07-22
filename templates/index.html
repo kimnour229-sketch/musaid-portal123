@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+{% block title %}المكتبة الرقمية — منصة المذكرات{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="ms-hero ms-fade-up mb-4">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <span class="ms-eyebrow text-white-50">المكتبة الأكاديمية الرقمية</span>
+      <h1 class="fw-bold mt-2 mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem);">
+        كل مذكراتك الدراسية<br>في مكان واحد
+      </h1>
+      <p class="opacity-75 mb-4" style="max-width:48ch;">
+        تصفّح وحمّل المذكرات والمراجع لكل قسم وفصل دراسي، بحث سريع ومحتوى متجدد من أعضاء هيئة التدريس.
+      </p>
+      <a href="#searchCard" class="btn btn-light rounded-pill px-4 fw-bold text-primary">
+        <i class="bi bi-search me-1"></i> ابدأ البحث
+      </a>
+    </div>
+    <div class="col-lg-5 d-none d-lg-block text-center">
+      <i class="bi bi-mortarboard-fill" style="font-size:9rem;opacity:.9;"></i>
+    </div>
+  </div>
+</section>
+
+<!-- Live stats -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="ms-stat ms-fade-up h-100">
+      <div class="d-flex align-items-center gap-3">
+        <div class="ms-stat-icon"><i class="bi bi-collection-fill"></i></div>
+        <div><div class="ms-stat-value">{{ stats.handouts }}</div><div class="ms-stat-label">مذكرة متاحة</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="ms-stat ms-stat--success ms-fade-up-2 h-100">
+      <div class="d-flex align-items-center gap-3">
+        <div class="ms-stat-icon"><i class="bi bi-book-half"></i></div>
+        <div><div class="ms-stat-value">{{ stats.subjects }}</div><div class="ms-stat-label">مادة دراسية</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="ms-stat ms-fade-up-2 h-100">
+      <div class="d-flex align-items-center gap-3">
+        <div class="ms-stat-icon"><i class="bi bi-people-fill"></i></div>
+        <div><div class="ms-stat-value">{{ stats.teachers }}</div><div class="ms-stat-label">عضو هيئة تدريس</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="ms-stat ms-stat--warning ms-fade-up-3 h-100">
+      <div class="d-flex align-items-center gap-3">
+        <div class="ms-stat-icon"><i class="bi bi-diagram-3-fill"></i></div>
+        <div><div class="ms-stat-value">{{ stats.departments }}</div><div class="ms-stat-label">قسم علمي</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search card -->
+<div class="card ms-fade-up-2 mb-5" id="searchCard">
+  <div class="card-body p-4 p-md-5">
+    <div class="d-flex align-items-center gap-2 mb-4">
+      <div class="ms-stat-icon" style="width:44px;height:44px;font-size:1.25rem;"><i class="bi bi-search"></i></div>
+      <div>
+        <h2 class="ms-h2 mb-0">البحث عن المذكرات</h2>
+        <small class="text-muted">اختر القسم والفصل لعرض المواد المتاحة</small>
+      </div>
+    </div>
+
+    <form action="/search" method="GET">
+      <div class="row g-3">
+        <div class="col-md-5">
+          <label class="form-label">القسم العلمي</label>
+          <select class="form-select form-select-lg" name="dept" required>
+            <option value="">اختر القسم…</option>
+            {% for dept in depts %}
+            <option value="{{ dept.id }}">{{ dept.dept_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">الفصل الدراسي</label>
+          <select class="form-select form-select-lg" name="semester" required>
+            <option value="">اختر الفصل…</option>
+            {% for i in range(1, 7) %}
+            <option value="{{ i }}">الفصل الدراسي {{ i }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-gradient btn-lg w-100">
+            <i class="bi bi-arrow-left-circle me-1"></i> عرض المواد
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Feature highlights -->
+<div class="row g-3 text-center mb-3">
+  <div class="col-md-4">
+    <div class="card h-100 ms-hover-lift"><div class="card-body p-4">
+      <i class="bi bi-lightning-charge-fill fs-2 text-brand"></i>
+      <h5 class="fw-bold mt-2">بحث سريع</h5>
+      <p class="text-muted small mb-0">وصول مباشر للمذكرات حسب القسم والفصل.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 ms-hover-lift"><div class="card-body p-4">
+      <i class="bi bi-journal-check fs-2 text-success"></i>
+      <h5 class="fw-bold mt-2">محتوى متجدد</h5>
+      <p class="text-muted small mb-0">مذكرات محدثة لكل فصل دراسي.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 ms-hover-lift"><div class="card-body p-4">
+      <i class="bi bi-shield-lock-fill fs-2 text-warning"></i>
+      <h5 class="fw-bold mt-2">بيئة منظمة</h5>
+      <p class="text-muted small mb-0">تجربة استخدام سهلة وآمنة.</p>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

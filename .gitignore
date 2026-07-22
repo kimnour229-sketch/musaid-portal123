@@ -1,0 +1,20 @@
+# Secrets & runtime state — never commit
+.secret_key
+logs/
+*.log
+
+# Local DB copies / test artifacts
+_test_*.db
+_verify_*.py
+_audit_*.py
+data_export_*.json
+musaid_ist.backup.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Uploads (user content)
+uploads/

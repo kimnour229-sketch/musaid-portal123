@@ -1,0 +1,80 @@
+{% extends "admin/admin_layout.html" %}
+{% block title %}إدارة الأقسام — لوحة الإدارة{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+  <div>
+    <h1 class="ms-h2 mb-0"><i class="bi bi-diagram-3 text-brand me-2"></i> إدارة الأقسام</h1>
+    <small class="text-muted">{{ departments|length }} قسم في النظام</small>
+  </div>
+  <button class="btn btn-gradient rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addDeptModal">
+    <i class="bi bi-plus-lg me-1"></i> إضافة قسم
+  </button>
+</div>
+
+<div class="ms-table-wrap">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr>
+        <th class="ps-4">القسم</th>
+        <th class="text-center">المواد</th>
+        <th class="text-center">المذكرات</th>
+        <th class="text-center">الإجراءات</th>
+      </tr></thead>
+      <tbody>
+        {% for dept in departments %}
+        <tr>
+          <td class="ps-4"><span class="fw-bold"><i class="bi bi-diagram-3 text-brand me-2"></i>{{ dept.dept_name }}</span></td>
+          <td class="text-center"><span class="ms-badge">{{ dept.subject_count }}</span></td>
+          <td class="text-center"><span class="ms-badge">{{ dept.handout_count }}</span></td>
+          <td class="text-center">
+            <form method="POST" action="/admin/delete_department/{{ dept.id }}" class="d-inline" id="delDeptForm{{ dept.id }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                      onclick="confirmDeleteDept('{{ dept.id }}', '{{ dept.dept_name }}', {{ dept.subject_count + dept.handout_count }})">
+                <i class="bi bi-trash me-1"></i> حذف
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted py-4">لا توجد أقسام بعد. أضف أول قسم.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add modal -->
+<div class="modal fade" id="addDeptModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-2xl shadow">
+      <div class="modal-header border-0"><h5 class="fw-bold m-0"><i class="bi bi-plus-circle text-brand me-2"></i>إضافة قسم جديد</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <form action="/admin/add_department" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="modal-body pt-0">
+          <div class="mb-3">
+            <label class="form-label">اسم القسم</label>
+            <input type="text" name="dept_name" class="form-control" required maxlength="120" placeholder="مثال: الإدارة والتنظيم القانوني">
+          </div>
+          <button type="submit" class="btn btn-gradient w-100">حفظ القسم في النظام</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmDeleteDept(id, name, used) {
+  if (used > 0) {
+    Swal.fire({ title: 'لا يمكن الحذف', text: 'القسم "' + name + '" مرتبط بمواد أو مذكرات. احذفها أولاً ثم أعد المحاولة.', icon: 'warning', confirmButtonColor: '#2563EB', confirmButtonText: 'حسناً' });
+    return;
+  }
+  Swal.fire({ title: 'هل أنت متأكد؟', text: 'سيتم حذف قسم "' + name + '" نهائياً.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#EF4444', cancelButtonColor: '#64748B', confirmButtonText: 'نعم، احذف', cancelButtonText: 'إلغاء', reverseButtons: true })
+    .then(function (r) { if (r.isConfirmed) document.getElementById('delDeptForm' + id).submit(); });
+}
+</script>
+{% endblock %}

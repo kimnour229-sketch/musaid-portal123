@@ -1,0 +1,32 @@
+# Musaid Portal — Python dependencies (pinned to verified versions)
+# Install:  pip install -r requirements.txt
+
+# --- Web framework ---
+Flask==3.1.3
+Werkzeug==3.1.8
+
+# --- Document parsing / OCR (handout text extraction & summaries) ---
+pypdf==6.12.2
+PyMuPDF==1.27.2.3
+python-docx==1.2.0
+python-pptx==1.0.2
+Pillow==12.2.0
+pytesseract==0.3.13
+# NOTE: pytesseract requires the Tesseract OCR engine installed at the OS level,
+#       with Arabic + English language packs:  tesseract-ocr tesseract-ocr-ara tesseract-ocr-eng
+
+# --- Production WSGI server (Linux) ---
+gunicorn==23.0.0
+
+# --- Environment file loading (optional but recommended) ---
+python-dotenv==1.0.1
+
+# --- MySQL / MariaDB backend (optional; only needed if NOT using SQLite) ---
+# Connection string format:
+#   mysql+pymysql://username:password@localhost/musaid_portal
+# SQLite remains the default and needs neither of these.
+SQLAlchemy==2.0.50
+PyMySQL==1.2.0
+
+# --- Windows alternative WSGI server (uncomment if deploying on Windows) ---
+# waitress==3.0.2
