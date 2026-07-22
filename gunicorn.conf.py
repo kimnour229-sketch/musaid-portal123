@@ -28,10 +28,9 @@ max_requests_jitter = 100
 limit_request_line = 8190
 
 # --- Logging ---
-accesslog = os.environ.get("GUNICORN_ACCESS_LOG", "/var/log/musaid/access.log")
-errorlog = os.environ.get("GUNICORN_ERROR_LOG", "/var/log/musaid/error.log")
+accesslog = "-"
+errorlog = "-"
 loglevel = os.environ.get("GUNICORN_LOG_LEVEL", "info")
-
 # --- Process naming ---
 proc_name = "musaid"
 
